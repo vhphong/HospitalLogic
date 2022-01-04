@@ -33,7 +33,7 @@ app.post('/users/register', async (req, res) => {
         // verify if email input has been taken
         return res.status(403).send(`Email ${req.body.email} has been taken. Choose another one.`);
     } else {
-        // make user id auto-increased, started at 1
+        // make userid auto-increased, started at 1
         const query = datastore.createQuery('User');
         const response = await datastore.runQuery(query);
         const runningId: number = Number(response[0].length + 1);
@@ -141,19 +141,50 @@ app.patch('/users/login', async (req, res) => {
     const emailInput = req.body.email;
     const passwordInput = req.body.password;
 
+    const query = datastore.createQuery('User').filter('email', '=', emailInput).filter('password', '=', passwordInput);
+    const [data, metaInfo] = await datastore.runQuery(query);
+
+    // console.log('data.length: ' + data.length);
+
+    if (data.length >= 1) {
+        const query = datastore.createQuery('User').filter('email', '=', req.body.email).filter('isActive', '=', true);
+        const [emailData, metaInfo] = await datastore.runQuery(query);
+        if (emailData.length >= 1) {
+            res.status(200).send(emailData[0]);
+        } else {
+            res.status(401).send(false);
+        }
+    } else {
+        res.status(401).send(false);
+    }
+});
+
+
+// login using userid, with hashing password
+/**
+ * check if user email is valid and inActive
+ * if yes, return the email and password
+ * else, return false
+ */
+app.patch('/login', async (req, res) => {
+    const emailInput = req.body.email;
+    const passwordInput = req.body.password;
+
     const query = datastore.createQuery('User').filter('email', '=', emailInput);
     const [data, metaInfo] = await datastore.runQuery(query);
 
     console.log(data);
-    // console.log(data.length);
+    console.log(data.length);
 
     const user = {
         email: emailInput,
         password: passwordInput
     }
 
-    if (data[0].length > 0) { // if email is valid, check if its password is valid
-        if (decryptPassword(data[0][0].password) === passwordInput) {
+    if (data.length > 0) { // if email is valid, check if its password is valid
+        console.log(data[0].password);
+        console.log(decryptPassword(data[0].password));
+        if (decryptPassword(data[0].password) === passwordInput) {
             // create JWT
             const tokenDuration = {
                 expiresIn: '30m'
@@ -161,35 +192,11 @@ app.patch('/users/login', async (req, res) => {
 
             const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, tokenDuration);
 
-            return res.status(200).send({ 'token': accessToken });
+            return res.status(200).json({ 'token': accessToken });
         }
     }
 
     return res.status(401).send(false);
-
-
-
-
-
-
-
-
-    // const query = datastore.createQuery('User').filter('email', '=', emailInput).filter('password', '=', passwordInput);
-    // const [data, metaInfo] = await datastore.runQuery(query);
-
-    // // console.log('data.length: ' + data.length);
-
-    // if (data.length >= 1) {
-    //     const query = datastore.createQuery('User').filter('email', '=', req.body.email).filter('isActive', '=', true);
-    //     const [emailData, metaInfo] = await datastore.runQuery(query);
-    //     if (emailData.length >= 1) {
-    //         res.status(200).send(emailData[0]);
-    //     } else {
-    //         res.status(401).send(false);
-    //     }
-    // } else {
-    //     res.status(401).send(false);
-    // }
 });
 
 
