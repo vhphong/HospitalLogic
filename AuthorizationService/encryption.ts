@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-export default function encryptPassword(password: string) {
+const encryptPassword = (password: string) => {
     try {
         let encrypted: any = password.split('').map(a => a.charCodeAt(0));  // convert each character to a decimal number
         // console.log(encrypted);
@@ -50,3 +50,5 @@ export default function encryptPassword(password: string) {
         console.log(error);
     }
 };
+
+export default encryptPassword;
