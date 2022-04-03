@@ -4,6 +4,7 @@ import { UserServiceImpl } from './services/user-service-impl';
 import UserService from './services/user-service';
 
 import cors from 'cors';
+import { ResourceNotFoundException } from './exceptions/ResourceNotFoundException';
 
 const app = express();
 app.use(express.json());    // Middleware
@@ -26,6 +27,19 @@ app.post('/users/register', async (req, res) => {
     let newUser: User = req.body;
     newUser = await userService.registerUser(newUser);
     res.status(200).send(newUser);
+});
+
+
+// get all users
+app.get('/users', async (req, res) => {
+    try {
+        const allUsers: User[] = await userService.retrieveAllUsers();
+        res.status(200).send(allUsers);
+    } catch (err) {
+        if (err instanceof ResourceNotFoundException) {
+            res.status(400).send(err);
+        }
+    }
 });
 
 

@@ -5,4 +5,6 @@ export default interface UserService {
 
     registerUser(user: User): Promise<User>;
 
+    retrieveAllUsers(): Promise<User[]>;
+
 };
