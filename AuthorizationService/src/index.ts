@@ -13,7 +13,6 @@ app.use(cors());
 const userService: UserService = new UserServiceImpl();
 
 
-
 // register a new user, NOT using hashing password
 app.post('/users/register', async (req, res) => {
     // read in email and password
