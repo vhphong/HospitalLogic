@@ -19,7 +19,7 @@ test('Test: DAO createUser', async () => {
 
 
 // PASSED
-test('Test: DAO getAllUsers',async () => {
+test('Test: DAO getAllUsers', async () => {
     let sampleUser1: User = new User(0, 'sampleUser1@email.com', 'pw1', false);
     let sampleUser2: User = new User(0, 'sampleUser2@email.com', 'pw2', false);
     let sampleUser3: User = new User(0, 'sampleUser3@email.com', 'pw3', false);
@@ -28,7 +28,7 @@ test('Test: DAO getAllUsers',async () => {
     sampleUser2 = await userDAO.createUser(sampleUser2);
     sampleUser3 = await userDAO.createUser(sampleUser3);
 
-    const allUsers: User[]=await userDAO.getAllUsers();
+    const allUsers: User[] = await userDAO.getAllUsers();
 
     expect(allUsers.length).toBeGreaterThanOrEqual(3);
 });
