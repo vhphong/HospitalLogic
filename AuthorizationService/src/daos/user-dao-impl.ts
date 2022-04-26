@@ -34,4 +34,37 @@ export class UserDAOImpl implements UserDAO {
         return allUsers;
     }
 
+
+    async getAccountByEmail(email: string): Promise<User> {
+        const sqlStr: string = 'SELECT * FROM employee WHERE u_email = $1';
+        const values = [email];
+        const result = await connection_pg.query(sqlStr, values);
+
+        if (result.rowCount === 0) {
+            throw new ResourceNotFoundException(`The account with email ${email} does not exist.`);
+        }
+
+        const row = result.rows[0];
+        const retrievedUser: User = new User(
+            row.u_id,
+            row.u_email,
+            row.u_pw,
+            row.is_active
+        );
+
+        return retrievedUser;
+    }
+
+
+    async verifyAccount(user: User): Promise<Boolean> {
+        const sqlStr: string = 'SELECT * FROM employee WHERE u_email = $1 AND u_pw = $2';
+        const values = [user.email, user.password];
+        const result = await connection_pg.query(sqlStr, values);
+
+        if (result.rowCount == 0) {
+            return false;
+        }
+        return true;
+    }
+
 }

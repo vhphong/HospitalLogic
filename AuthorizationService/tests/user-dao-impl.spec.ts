@@ -34,6 +34,28 @@ test('Test: DAO getAllUsers', async () => {
 });
 
 
+// PASSED
+test('Test: getAccountByEmail', async () => {
+    let sampleUser1: User = new User(0, 'sampleUser1@email.com', 'pw1', false);
+
+    sampleUser1 = await userDAO.createUser(sampleUser1);
+
+    const retrievedUser: User = await userDAO.getAccountByEmail(sampleUser1.email);
+
+    expect(retrievedUser.email).toBe(sampleUser1.email);
+});
+
+
+// PASSED
+test('Test: verifyAccount',async () => {
+    let sampleUser1: User = new User(0, 'sampleUser1@email.com', 'pw1', false);
+
+    sampleUser1 = await userDAO.createUser(sampleUser1);
+
+    const userVerification:Boolean= await userDAO.verifyAccount(sampleUser1);
+
+    expect(userVerification).toBeTruthy;
+});
 
 
 afterAll(async () => {

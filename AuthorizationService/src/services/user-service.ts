@@ -7,4 +7,8 @@ export default interface UserService {
 
     retrieveAllUsers(): Promise<User[]>;
 
+    retrieveUserByEmail(email: string): Promise<User>;
+
+    verifyUser(user: User): Promise<Boolean>;
+
 };

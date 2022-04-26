@@ -12,6 +12,11 @@ export interface UserDAO {
 
 
     // get account by email
+    getAccountByEmail(email: string): Promise<User>;
+
+
+    // verify account
+    verifyAccount(user: User): Promise<Boolean>;
 
 
     // update account
