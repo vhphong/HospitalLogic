@@ -14,7 +14,7 @@ app.use(cors());
 const userService: UserService = new UserServiceImpl();
 
 
-// register a new user, NOT using hashing password
+// register a new user, without using hashing password
 app.post('/users/register', async (req, res) => {
     try {
 
@@ -30,7 +30,7 @@ app.post('/users/register', async (req, res) => {
         newUser = await userService.registerUser(newUser);
         res.status(200).send(newUser);
     } catch (error) {
-        res.status(400).send(error);
+        res.status(403).send(error);
     }
 });
 
@@ -51,11 +51,11 @@ app.post('/users/create', async (req, res) => {
     try {
 
         // read in email and password
-        // const bodyEmail = req.body.email;
+        const bodyEmail = req.body.email;
         const bodyPassword = encrypt(req.body.password);
 
         // if the email exists in the database, do not register for a new account
-        const userVerification: Boolean = await userService.verifyUser(req.body);
+        const userVerification: Boolean = await userService.isEmailAvailable(bodyEmail);
         if (userVerification == true) {
             res.status(403).send(false);
             return;
