@@ -47,12 +47,12 @@ test('Test: getAccountByEmail', async () => {
 
 
 // PASSED
-test('Test: verifyAccount',async () => {
+test('Test: verifyAccount', async () => {
     let sampleUser1: User = new User(0, 'sampleUser1@email.com', 'pw1', false);
 
     sampleUser1 = await userDAO.createUser(sampleUser1);
 
-    const userVerification:Boolean= await userDAO.verifyAccount(sampleUser1);
+    const userVerification: Boolean = await userDAO.verifyAccount(sampleUser1);
 
     expect(userVerification).toBeTruthy;
 });

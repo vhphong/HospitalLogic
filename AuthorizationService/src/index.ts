@@ -5,6 +5,7 @@ import UserService from './services/user-service';
 
 import cors from 'cors';
 import { ResourceNotFoundException } from './exceptions/ResourceNotFoundException';
+import encrypt from './encryption';
 
 const app = express();
 app.use(express.json());    // Middleware
@@ -32,6 +33,68 @@ app.post('/users/register', async (req, res) => {
         res.status(400).send(error);
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+// register a new user, using hashing password
+app.post('/users/create', async (req, res) => {
+    try {
+
+        // read in email and password
+        // const bodyEmail = req.body.email;
+        const bodyPassword = encrypt(req.body.password);
+
+        // if the email exists in the database, do not register for a new account
+        const userVerification: Boolean = await userService.verifyUser(req.body);
+        if (userVerification == true) {
+            res.status(403).send(false);
+            return;
+        }
+
+        // if email is invalid 
+        // code here
+
+        // if email is valid and available
+        let newUser: User = req.body;
+        newUser.password = bodyPassword;
+        newUser = await userService.registerUser(newUser);
+        res.status(200).send(newUser);
+        return;
+    } catch (error) {
+        res.status(400).send(error);
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // get all users
@@ -69,7 +132,7 @@ app.patch('/users/verify', async (req, res) => {
 
         const userVerification: Boolean = await userService.verifyUser(reqBody);
         if (userVerification == true) {
-            res.status(201).send(true);
+            res.status(200).send(true);
         } else {
             res.status(401).send(false);
         }
@@ -103,6 +166,9 @@ app.patch('/users/login', async (req, res) => {
         }
     }
 });
+
+
+
 
 
 const PORT = process.env.PORT_auth || 3001;

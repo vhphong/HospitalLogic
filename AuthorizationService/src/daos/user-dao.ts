@@ -20,8 +20,9 @@ export interface UserDAO {
 
 
     // update account
+    checkIfEmailAvailable(email: string): Promise<Boolean>;
 
-
+    
     // enable account
 
 

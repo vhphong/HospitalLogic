@@ -67,4 +67,18 @@ export class UserDAOImpl implements UserDAO {
         return true;
     }
 
+
+    async checkIfEmailAvailable(email: string): Promise<Boolean> {
+        // const sqlStr1: string = 'SELECT * FROM employee WHERE u_email = $1 AND u_pw = $2';
+        // const values1 = [user.email, user.password];
+
+        const sqlStr2: string = 'SELECT * FROM employee WHERE u_email = $1';
+        const values2 = [email];
+        const result = await connection_pg.query(sqlStr2, values2);
+
+        if (result.rowCount == 0) {
+            return false;
+        }
+        return true;
+    }
 }

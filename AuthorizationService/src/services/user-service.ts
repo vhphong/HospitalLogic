@@ -11,4 +11,6 @@ export default interface UserService {
 
     verifyUser(user: User): Promise<Boolean>;
 
+    isEmailAvailable(email: string): Promise<Boolean>;
+
 };
