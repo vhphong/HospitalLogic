@@ -1,60 +1,88 @@
 import { connection_pg } from "../src/connection-pg";
-import { UserDAO } from "../src/daos/user-dao";
-import { UserDAOImpl } from "../src/daos/user-dao-impl";
-import { User } from "../src/models/employee";
+import { AccountDAO } from "../src/daos/account-dao";
+import { AccountDAOImpl } from "../src/daos/account-dao-impl";
+import { Account } from "../src/models/employee";
 
 
-const userDAO: UserDAO = new UserDAOImpl();
+const accountDAO: AccountDAO = new AccountDAOImpl();
 
 
 // PASSED
-test('Test: DAO createUser', async () => {
-    let sampleUser1: User = new User(0, 'sampleUser1@email.com', 'pw1', false);
-    sampleUser1 = await userDAO.createUser(sampleUser1);
+test('Test: DAO createAccount', async () => {
+    let sampleAccount1: Account = new Account(0, 'sampleAccount1@email.com', 'pw1', false);
+    sampleAccount1 = await accountDAO.createAccount(sampleAccount1);
 
-    console.log(sampleUser1);
+    console.log(sampleAccount1);
 
-    expect(sampleUser1.userID).not.toBe(0);
+    expect(sampleAccount1.accountID).not.toBe(0);
 });
 
 
 // PASSED
-test('Test: DAO getAllUsers', async () => {
-    let sampleUser1: User = new User(0, 'sampleUser1@email.com', 'pw1', false);
-    let sampleUser2: User = new User(0, 'sampleUser2@email.com', 'pw2', false);
-    let sampleUser3: User = new User(0, 'sampleUser3@email.com', 'pw3', false);
+test('Test: DAO getAllAccounts', async () => {
+    let sampleAccount1: Account = new Account(0, 'sampleAccount1@email.com', 'pw1', false);
+    let sampleAccount2: Account = new Account(0, 'sampleAccount2@email.com', 'pw2', false);
+    let sampleAccount3: Account = new Account(0, 'sampleAccount3@email.com', 'pw3', false);
 
-    sampleUser1 = await userDAO.createUser(sampleUser1);
-    sampleUser2 = await userDAO.createUser(sampleUser2);
-    sampleUser3 = await userDAO.createUser(sampleUser3);
+    sampleAccount1 = await accountDAO.createAccount(sampleAccount1);
+    sampleAccount2 = await accountDAO.createAccount(sampleAccount2);
+    sampleAccount3 = await accountDAO.createAccount(sampleAccount3);
 
-    const allUsers: User[] = await userDAO.getAllUsers();
+    const allAccounts: Account[] = await accountDAO.getAllAccounts();
 
-    expect(allUsers.length).toBeGreaterThanOrEqual(3);
+    expect(allAccounts.length).toBeGreaterThanOrEqual(3);
 });
 
 
 // PASSED
 test('Test: getAccountByEmail', async () => {
-    let sampleUser1: User = new User(0, 'sampleUser1@email.com', 'pw1', false);
+    let sampleAccount1: Account = new Account(0, 'sampleAccount1@email.com', 'pw1', false);
 
-    sampleUser1 = await userDAO.createUser(sampleUser1);
+    sampleAccount1 = await accountDAO.createAccount(sampleAccount1);
 
-    const retrievedUser: User = await userDAO.getAccountByEmail(sampleUser1.email);
+    const retrievedAccount: Account = await accountDAO.getAccountByEmail(sampleAccount1.email);
 
-    expect(retrievedUser.email).toBe(sampleUser1.email);
+    expect(retrievedAccount.email).toBe(sampleAccount1.email);
 });
 
 
 // PASSED
 test('Test: verifyAccount', async () => {
-    let sampleUser1: User = new User(0, 'sampleUser1@email.com', 'pw1', false);
+    let sampleAccount1: Account = new Account(0, 'sampleAccount1@email.com', 'pw1', false);
 
-    sampleUser1 = await userDAO.createUser(sampleUser1);
+    sampleAccount1 = await accountDAO.createAccount(sampleAccount1);
 
-    const userVerification: Boolean = await userDAO.verifyAccount(sampleUser1);
+    const accountVerification: Boolean = await accountDAO.verifyAccount(sampleAccount1);
 
-    expect(userVerification).toBeTruthy;
+    expect(accountVerification).toBeTruthy;
+});
+
+
+// PASSED
+test('Test: checkIfEmailAvailable', async () => {
+    let sampleAccount1: Account = new Account(0, 'sampleAccount1@email.com', 'pw1', false);
+
+    sampleAccount1 = await accountDAO.createAccount(sampleAccount1);
+
+    const accountAvailibility: Boolean = await accountDAO.checkIfEmailAvailable(sampleAccount1.email);
+
+    expect(accountAvailibility).toBeFalsy;
+});
+
+
+//
+test('Test: activateAccount', async () => {
+    let sampleAccount1: Account = new Account(0, 'sampleAccount1@email.com', 'pw1', false);
+
+    sampleAccount1 = await accountDAO.createAccount(sampleAccount1);
+
+    const accountActiveStatus: Boolean = await accountDAO.activateAccount(sampleAccount1);
+
+    expect(accountActiveStatus).toBeTruthy;
+
+    // const retrievedAccount: Account = await accountDAO.getAccountByEmail(sampleAccount1.email);
+
+
 });
 
 

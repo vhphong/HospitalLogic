@@ -1,7 +1,7 @@
 
-export class User {
+export class Account {
     constructor(
-        public userID: number,
+        public accountID: number,
         public email: string,
         public password: string,
         public isActive: boolean
