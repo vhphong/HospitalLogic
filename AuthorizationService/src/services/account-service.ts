@@ -14,4 +14,9 @@ export default interface AccountService {
     isEmailAvailable(email: string): Promise<Boolean>;
 
     activateAccount(account: Account): Promise<Boolean>;
+
+    deactivateAccount(account: Account): Promise<Boolean>;
+
+    changePassword(account: Account, newPassword: string): Promise<Boolean>;
+
 };

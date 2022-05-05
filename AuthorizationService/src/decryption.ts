@@ -1,8 +1,14 @@
+import console from "console";
+
 export default function decrypt(inputPw: string) {
 
     // let encryptedPassword: string = req.body.password;
 
     let encryptedPasswordArray: any[] = inputPw.split('');
+
+    let delimiters = ["!", "@", "#", "$", "%", "^", "&", "*"];
+    let existence = delimiters.some(item => item == '!');
+    console.log('existence: ' + existence);
 
     for (let i = 0; i < encryptedPasswordArray.length; i++) {
         if ((encryptedPasswordArray[i] == '!') || (encryptedPasswordArray[i] == '@') ||

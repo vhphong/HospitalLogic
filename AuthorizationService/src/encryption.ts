@@ -9,7 +9,7 @@ export default function encrypt(originalPassword: string) {
         chars.push(String.fromCharCode(i));
     }
     console.log(chars);
-    const delimiters = ["!", "@", "#", "$", "%", "^", "&", "*"];
+    let delimiters = ["!", "@", "#", "$", "%", "^", "&", "*"];
 
     // convert encrypted to an array of binary strings
     for (let i = 0; i < encrypted.length; i++) {

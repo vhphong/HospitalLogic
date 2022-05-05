@@ -56,7 +56,7 @@ export class AccountDAOImpl implements AccountDAO {
     }
 
 
-    async verifyAccount(account: Account): Promise<Boolean> {
+    async isAccountExisted(account: Account): Promise<Boolean> {
         const sqlStr: string = 'SELECT * FROM employee WHERE u_email = $1 AND u_pw = $2';
         const values = [account.email, account.password];
         const result = await connection_pg.query(sqlStr, values);
@@ -69,9 +69,6 @@ export class AccountDAOImpl implements AccountDAO {
 
 
     async checkIfEmailAvailable(email: string): Promise<Boolean> {
-        // const sqlStr1: string = 'SELECT * FROM employee WHERE u_email = $1 AND u_pw = $2';
-        // const values1 = [account.email, account.password];
-
         const sqlStr2: string = 'SELECT * FROM employee WHERE u_email = $1';
         const values2 = [email];
         const result = await connection_pg.query(sqlStr2, values2);
@@ -83,10 +80,10 @@ export class AccountDAOImpl implements AccountDAO {
     }
 
 
-    async activateAccount(account: Account): Promise<Boolean> {
+    async enableAccount(account: Account): Promise<Boolean> {
         const sqlStr1: string = 'UPDATE employee SET is_active = $1 WHERE u_email = $2';
         const values1 = [true, account.email];
-        const result1 = await connection_pg.query(sqlStr1, values1);
+        await connection_pg.query(sqlStr1, values1);
 
         const sqlStr2: string = 'SELECT * FROM employee WHERE u_email = $1';
         const values2 = [account.email];
@@ -105,5 +102,59 @@ export class AccountDAOImpl implements AccountDAO {
         );
 
         return (retrievedAccount.isActive == true) ? true : false;
+    }
+
+
+    async disableAccount(account: Account): Promise<Boolean> {
+        const sqlStr1: string = 'UPDATE employee SET is_active = $1 WHERE u_email = $2';
+        const values1 = [false, account.email];
+        await connection_pg.query(sqlStr1, values1);
+
+        const sqlStr2: string = 'SELECT * FROM employee WHERE u_email = $1';
+        const values2 = [account.email];
+        const result2 = await connection_pg.query(sqlStr2, values2);
+
+        if (result2.rowCount == 0) {
+            throw new ResourceNotFoundException(`The account with email ${account.email} does not exist.`);
+        }
+
+        const row = result2.rows[0];
+        const retrievedAccount: Account = new Account(
+            row.u_id,
+            row.u_email,
+            row.u_pw,
+            row.is_active
+        );
+
+        return (retrievedAccount.isActive == false) ? true : false;
+    }
+
+
+    async alterPassword(account: Account, newPassword: string): Promise<Boolean> {
+        const sqlStr: string = 'UPDATE employee SET u_pw = $1 WHERE u_email = $2';
+        const values = [newPassword, account.email];
+        await connection_pg.query(sqlStr, values);
+
+        const sqlStr2: string = 'SELECT * FROM employee WHERE u_email = $1';
+        const values2 = [account.email];
+        const result2 = await connection_pg.query(sqlStr2, values2);
+
+        if (result2.rowCount == 0) {
+            return false;
+        }
+
+        const row = result2.rows[0];
+        const retrievedAccount: Account = new Account(
+            row.u_id,
+            row.u_email,
+            row.u_pw,
+            row.is_active
+        );
+
+        if (retrievedAccount.password === newPassword) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

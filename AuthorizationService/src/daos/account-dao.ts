@@ -16,7 +16,7 @@ export interface AccountDAO {
 
 
     // verify account
-    verifyAccount(account: Account): Promise<Boolean>;
+    isAccountExisted(account: Account): Promise<Boolean>;
 
 
     // update account
@@ -24,10 +24,15 @@ export interface AccountDAO {
 
 
     // activate account
-    activateAccount(account: Account): Promise<Boolean>;
+    enableAccount(account: Account): Promise<Boolean>;
 
 
     // deactivate account
+    disableAccount(account: Account): Promise<Boolean>;
+
+
+    // change password
+    alterPassword(account: Account, newPw: string): Promise<Boolean>;
 
 
     // delete account

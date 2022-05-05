@@ -52,7 +52,7 @@ test('Test: verifyAccount', async () => {
 
     sampleAccount1 = await accountDAO.createAccount(sampleAccount1);
 
-    const accountVerification: Boolean = await accountDAO.verifyAccount(sampleAccount1);
+    const accountVerification: Boolean = await accountDAO.isAccountExisted(sampleAccount1);
 
     expect(accountVerification).toBeTruthy;
 });
@@ -70,21 +70,42 @@ test('Test: checkIfEmailAvailable', async () => {
 });
 
 
-//
+// PASSED
 test('Test: activateAccount', async () => {
     let sampleAccount1: Account = new Account(0, 'sampleAccount1@email.com', 'pw1', false);
 
     sampleAccount1 = await accountDAO.createAccount(sampleAccount1);
 
-    const accountActiveStatus: Boolean = await accountDAO.activateAccount(sampleAccount1);
+    const accountActiveStatus: Boolean = await accountDAO.enableAccount(sampleAccount1);
 
     expect(accountActiveStatus).toBeTruthy;
-
-    // const retrievedAccount: Account = await accountDAO.getAccountByEmail(sampleAccount1.email);
-
-
 });
 
+
+// PASSED
+test('Test: deactivateAccount', async () => {
+    let sampleAccount1: Account = new Account(0, 'sampleAccount1@email.com', 'pw1', true);
+
+    sampleAccount1 = await accountDAO.createAccount(sampleAccount1);
+
+    const accountActiveStatus: Boolean = await accountDAO.disableAccount(sampleAccount1);
+
+    expect(accountActiveStatus).not.toBeTruthy;
+});
+
+
+// PASSED
+test('Test: changePassword', async () => {
+    let sampleAccount1: Account = new Account(0, 'sampleAccount1@email.com', 'pw1', true);
+
+    sampleAccount1 = await accountDAO.createAccount(sampleAccount1);
+
+    await accountDAO.alterPassword(sampleAccount1, 'newpw');
+
+    const retrievedAccount: Account = await accountDAO.getAccountByEmail(sampleAccount1.email);
+
+    expect(retrievedAccount.password).toBe('newpw');
+});
 
 afterAll(async () => {
     connection_pg.end();

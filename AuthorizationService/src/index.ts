@@ -119,10 +119,43 @@ app.patch('/accounts/login', async (req, res) => {
 app.put('/accounts/activate', async (req, res) => {
     try {
         const reqBody = req.body;
-        const accountActivationStatus: Boolean = await accountService.activateAccount(reqBody);
+        const accountActivationResult: Boolean = await accountService.activateAccount(reqBody);
 
-        res.status(200).send(accountActivationStatus);
+        res.status(200).send(accountActivationResult);
+    } catch (error) {
+        if (error instanceof ResourceNotFoundException) {
+            res.status(404).send(error);
+        }
+    }
+});
 
+
+// deactivate an account
+app.put('/accounts/deactivate', async (req, res) => {
+    try {
+        const reqBody = req.body;
+        const accountDeactivationResult: Boolean = await accountService.deactivateAccount(reqBody);
+
+        res.status(200).send(accountDeactivationResult);
+    } catch (error) {
+        if (error instanceof ResourceNotFoundException) {
+            res.status(404).send(error);
+        }
+    }
+});
+
+
+// change account's password
+app.put('/accounts/changepassword/:email', async (req, res) => {
+    try {
+        // retrieve the account by email
+        const emailParam = req.params.email;
+        const newPassword = req.body.newPassword;
+        const retrievedAccount: Account = await accountService.retrieveAccountByEmail(emailParam);
+
+        const changePasswordResult: Boolean = await accountService.changePassword(retrievedAccount, newPassword)
+
+        res.status(200).send(changePasswordResult);
     } catch (error) {
         if (error instanceof ResourceNotFoundException) {
             res.status(404).send(error);

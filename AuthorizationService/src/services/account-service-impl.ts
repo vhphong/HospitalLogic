@@ -26,7 +26,7 @@ export class AccountServiceImpl implements AccountService {
 
 
     verifyAccount(account: Account): Promise<Boolean> {
-        return this.accountDAO.verifyAccount(account);
+        return this.accountDAO.isAccountExisted(account);
     }
 
 
@@ -36,6 +36,16 @@ export class AccountServiceImpl implements AccountService {
 
 
     activateAccount(account: Account): Promise<Boolean> {
-        return this.accountDAO.activateAccount(account);
+        return this.accountDAO.enableAccount(account);
+    }
+
+
+    deactivateAccount(account: Account): Promise<Boolean> {
+        return this.accountDAO.disableAccount(account);
+    }
+
+
+    changePassword(account: Account, newPassword: string): Promise<Boolean> {
+        return this.accountDAO.alterPassword(account, newPassword);
     }
 }
