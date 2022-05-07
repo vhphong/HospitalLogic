@@ -95,17 +95,21 @@ app.patch('/accounts/verify', async (req, res) => {
 app.patch('/accounts/login', async (req, res) => {
     try {
         const reqBody = req.body;
-        const emailBody = req.body.email;
-        const passwordBody = req.body.password;
+        const emailBody = reqBody.email;
+        const passwordBody = reqBody.password;
 
         const accountVerification: Boolean = await accountService.verifyAccount(reqBody);
         const retrievedAccount: Account = await accountService.retrieveAccountByEmail(emailBody);
 
         // compare the credentials saved in database with the input
-        if (accountVerification && (retrievedAccount.password === passwordBody)) {
-            res.status(200).send('logged in');
+        if (!retrievedAccount.isActive) {
+            res.status(403).send('inactive account');
         } else {
-            res.status(403).send('bad credentials');
+            if (accountVerification && (retrievedAccount.password === passwordBody)) {
+                res.status(200).send('logged in');
+            } else {
+                res.status(403).send('bad credentials');
+            }
         }
     } catch (error) {
         if (error instanceof ResourceNotFoundException) {
@@ -156,6 +160,26 @@ app.put('/accounts/changepassword/:email', async (req, res) => {
         const changePasswordResult: Boolean = await accountService.changePassword(retrievedAccount, newPassword)
 
         res.status(200).send(changePasswordResult);
+    } catch (error) {
+        if (error instanceof ResourceNotFoundException) {
+            res.status(404).send(error);
+        }
+    }
+});
+
+
+// remove an account
+app.delete('/accounts/delete/:email', async (req, res) => {
+    try {
+        const emailParam = req.params.email;
+
+        const deleteAccountResult: Boolean = await accountService.deleteAccount(emailParam);
+
+        if (deleteAccountResult) {
+            res.status(200).send(deleteAccountResult);  // will send T/F
+        } else {
+            res.status(400).send(false);  // will send T/F
+        }
     } catch (error) {
         if (error instanceof ResourceNotFoundException) {
             res.status(404).send(error);

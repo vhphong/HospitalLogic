@@ -48,4 +48,9 @@ export class AccountServiceImpl implements AccountService {
     changePassword(account: Account, newPassword: string): Promise<Boolean> {
         return this.accountDAO.alterPassword(account, newPassword);
     }
+
+
+    deleteAccount(email: string): Promise<Boolean> {
+        return this.accountDAO.removeAccount(email);
+    }
 }

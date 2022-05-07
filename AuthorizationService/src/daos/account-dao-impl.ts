@@ -157,4 +157,22 @@ export class AccountDAOImpl implements AccountDAO {
             return false;
         }
     }
+
+
+    async removeAccount(email: string): Promise<Boolean> {
+        const sqlStr1: string = 'DELETE FROM employee WHERE u_email = $1';
+        const values1 = [email];
+        await connection_pg.query(sqlStr1, values1);
+
+        // confirm the account was removed
+        const sqlStr2: string = 'SELECT * FROM employee WHERE u_email = $1';
+        const values2 = [email];
+        const result2 = await connection_pg.query(sqlStr2, values2);
+
+        if (result2.rowCount == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

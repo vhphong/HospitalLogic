@@ -19,4 +19,5 @@ export default interface AccountService {
 
     changePassword(account: Account, newPassword: string): Promise<Boolean>;
 
+    deleteAccount(email: string): Promise<Boolean>;
 };

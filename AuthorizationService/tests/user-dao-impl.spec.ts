@@ -107,6 +107,23 @@ test('Test: changePassword', async () => {
     expect(retrievedAccount.password).toBe('newpw');
 });
 
+
+// PASSED
+test('Test: removeAccount', async () => {
+    let sampleAccount1: Account = new Account(0, 'sampleAccount1@email.com', 'pw1', true);
+
+    sampleAccount1 = await accountDAO.createAccount(sampleAccount1);
+
+    await accountDAO.removeAccount(sampleAccount1.email);
+
+    const sqlStr: string = 'SELECT * FROM employee WHERE u_email = $1';
+    const values = [sampleAccount1.email];
+    const result = await connection_pg.query(sqlStr, values);
+
+    expect(result.rowCount).toBe(0);
+});
+
+
 afterAll(async () => {
     connection_pg.end();
 });

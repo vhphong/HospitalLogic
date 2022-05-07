@@ -35,6 +35,6 @@ export interface AccountDAO {
     alterPassword(account: Account, newPw: string): Promise<Boolean>;
 
 
-    // delete account
-
+    // remove account
+    removeAccount(email: string): Promise<Boolean>;
 };
