@@ -21,17 +21,17 @@ export class MessageServiceImpl implements MessageService {
     }
 
 
-    retrieveAllMessagesOfSender(senderEmail: string): Promise<Message[]> {
+    retrieveAllMessagesOfSender(senderEmail: any): Promise<Message[]> {
         return this.messageDAO.getAllMessagesOfSender(senderEmail);
     }
 
 
-    retrieveAllMessagesOfRecipient(recipientEmail: string): Promise<Message[]> {
+    retrieveAllMessagesOfRecipient(recipientEmail: any): Promise<Message[]> {
         return this.messageDAO.getAllMessagesOfRecipient(recipientEmail);
     }
 
 
-    retrieveAllMessagesOfSenderRecipient(senderEmail: string, recipientEmail: string): Promise<Message[]> {
+    retrieveAllMessagesOfSenderRecipient(senderEmail: any, recipientEmail: any): Promise<Message[]> {
         return this.messageDAO.getAllMessagesOfSenderRecipient(senderEmail, recipientEmail);
     }
 }
