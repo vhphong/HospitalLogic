@@ -7,14 +7,30 @@ import { Message } from "../src/models/message";
 const messageDAO: MessageDAO = new MessageDAOImpl();
 
 
-//
+// PASSED
 test('Test: DAO createMessage', async () => {
-    let sampleMessage: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');;
+    let sampleMessage: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
     sampleMessage = await messageDAO.createMessage(sampleMessage);
 
     console.log(sampleMessage);
 
     expect(sampleMessage.messageID).not.toBe(0);
+});
+
+
+// PASSED
+test('Test: DAO getAllMessages', async () => {
+    let sampleMessage1: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
+    let sampleMessage2: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
+    let sampleMessage3: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');;
+
+    sampleMessage1 = await messageDAO.createMessage(sampleMessage1);
+    sampleMessage2 = await messageDAO.createMessage(sampleMessage2);
+    sampleMessage3 = await messageDAO.createMessage(sampleMessage3);
+
+    const allMessages: Message[] = await messageDAO.getAllMessages();
+
+    expect(allMessages.length).toBeGreaterThanOrEqual(3);
 });
 
 

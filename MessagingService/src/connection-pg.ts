@@ -5,7 +5,7 @@ require('dotenv').config({ path: 'app.env' });
 export const connection_pg = new Client({
     user: 'postgres',
     database: 'hospitaldb',
-    password: 'phong0222',
+    password: process.env.DATABASEPASSWORD,
     port: 5432
 });
 

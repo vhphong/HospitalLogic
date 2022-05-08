@@ -15,4 +15,8 @@ export class MessageServiceImpl implements MessageService {
         return this.messageDAO.createMessage(message);
     }
 
+
+    retrieveAllMessages(): Promise<Message[]> {
+        return this.messageDAO.getAllMessages();
+    }
 }

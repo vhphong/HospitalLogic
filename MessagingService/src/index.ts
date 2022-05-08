@@ -5,6 +5,7 @@ import { connection_pg } from "./connection-pg";
 import { Message } from "./models/message";
 import MessageService from "./services/message-service";
 import { MessageServiceImpl } from "./services/message-service-impl";
+import { ResourceNotFoundException } from "./exceptions/ResourceNotFoundException";
 
 const app = express();
 app.use(express.json());
@@ -14,6 +15,7 @@ app.use(cors());
 const messageService: MessageService = new MessageServiceImpl();
 
 
+// create a new message
 app.post('/messages/create', async (req, res) => {
     try {
         const messageBody = req.body;
@@ -50,7 +52,17 @@ app.post('/messages/create', async (req, res) => {
 });
 
 
-
+// get all messages
+app.get('/messages', async (req, res) => {
+    try {
+        const allMessages: Message[] = await messageService.retrieveAllMessages();
+        res.status(200).send(allMessages);
+    } catch (error) {
+        if (error instanceof ResourceNotFoundException) {
+            res.status(400).send(error);
+        }
+    }
+});
 
 
 const PORT = process.env.PORT_messaging || 3002;
