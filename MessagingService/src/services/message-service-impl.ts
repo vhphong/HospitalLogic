@@ -1,0 +1,18 @@
+import { Message } from "../models/message";
+
+import { MessageDAO } from "../daos/message-dao";
+import { MessageDAOImpl } from "../daos/message-dao-impl";
+
+import MessageService from "./message-service";
+
+
+export class MessageServiceImpl implements MessageService {
+
+    messageDAO: MessageDAO = new MessageDAOImpl();
+
+
+    composeMessage(message: Message): Promise<Message> {
+        return this.messageDAO.createMessage(message);
+    }
+
+}
