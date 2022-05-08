@@ -79,6 +79,20 @@ app.get('/messages/sender/:senderemail', async (req, res) => {
 });
 
 
+// get all message of a sender
+app.get('/messages/recipient/:recipientemail', async (req, res) => {
+    try {
+        const emailParam = req.params.recipientemail;
+        const allMessages: Message[] = await messageService.retrieveAllMessagesOfRecipient(emailParam);
+        res.status(200).send(allMessages);
+    } catch (error) {
+        if (error instanceof ResourceNotFoundException) {
+            res.status(400).send(error);
+        }
+    }
+});
+
+
 const PORT = process.env.PORT_messaging || 3002;
 app.listen(
     PORT,

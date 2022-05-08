@@ -8,4 +8,6 @@ export default interface MessageService {
     retrieveAllMessages(): Promise<Message[]>;
 
     retrieveAllMessagesOfSender(senderEmail: string): Promise<Message[]>;
+
+    retrieveAllMessagesOfRecipient(recipientEmail: string): Promise<Message[]>;
 }

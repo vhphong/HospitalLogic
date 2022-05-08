@@ -13,4 +13,8 @@ export interface MessageDAO {
 
     // get all messages of a sender
     getAllMessagesOfSender(senderEmail: string): Promise<Message[]>;
+
+
+    // get all messages of a recipient
+    getAllMessagesOfRecipient(recipientEmail: string): Promise<Message[]>;
 }

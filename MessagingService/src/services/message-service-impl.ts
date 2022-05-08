@@ -24,4 +24,9 @@ export class MessageServiceImpl implements MessageService {
     retrieveAllMessagesOfSender(senderEmail: string): Promise<Message[]> {
         return this.messageDAO.getAllMessagesOfSender(senderEmail);
     }
+
+
+    retrieveAllMessagesOfRecipient(recipientEmail: string): Promise<Message[]> {
+        return this.messageDAO.getAllMessagesOfRecipient(recipientEmail);
+    }
 }
