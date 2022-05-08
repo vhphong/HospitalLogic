@@ -34,6 +34,22 @@ test('Test: DAO getAllMessages', async () => {
 });
 
 
+//
+test('Test: DAO getAllMessagesOfSender', async () => {
+    let sampleMessage1: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
+    let sampleMessage2: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
+    let sampleMessage3: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');;
+
+    sampleMessage1 = await messageDAO.createMessage(sampleMessage1);
+    sampleMessage2 = await messageDAO.createMessage(sampleMessage2);
+    sampleMessage3 = await messageDAO.createMessage(sampleMessage3);
+
+    const allMessages: Message[] = await messageDAO.getAllMessagesOfSender(sampleMessage1.senderEmail);
+
+    expect(allMessages.length).toBeGreaterThanOrEqual(3);
+});
+
+
 afterAll(async () => {
     connection_pg.end();
 });
