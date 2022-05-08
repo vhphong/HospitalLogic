@@ -76,4 +76,25 @@ export class MessageDAOImpl implements MessageDAO {
 
         return allMessages;
     }
+
+
+    async getAllMessagesOfSenderRecipient(senderEmail: string, recipientEmail: string): Promise<Message[]> {
+        const sqlStr: string = 'SELECT * FROM messages WHERE sender_email = $1 AND recipient_email = $2 ORDER BY m_id';
+        const values = [senderEmail, recipientEmail];
+        const result = await connection_pg.query(sqlStr, values);
+
+        const allMessages: Message[] = [];
+
+        for (let eachRow of result.rows) {
+            const eachMessage: Message = new Message(
+                eachRow.m_id,
+                eachRow.sender_email,
+                eachRow.recipient_email,
+                eachRow.m_content
+            );
+            allMessages.push(eachMessage);
+        }
+
+        return allMessages;
+    }
 }
