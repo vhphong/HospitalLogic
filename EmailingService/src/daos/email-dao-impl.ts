@@ -35,4 +35,26 @@ export class EmailDAOImpl implements EmailDAO {
 
         return allEmails;
     }
+
+
+    async getAllEmailsOfSender(senderEmail: string): Promise<Email[]> {
+        const sqlStr: string = 'SELECT * FROM email WHERE sender_email = $1 ORDER BY email_id';
+        const values = [senderEmail];
+        const result = await connection_pg.query(sqlStr, values);
+
+        const allEmails: Email[] = [];
+
+        for (let eachRow of result.rows) {
+            const eachEmail: Email = new Email(
+                eachRow.email_id,
+                eachRow.sender_email,
+                eachRow.recipient_email,
+                eachRow.email_subject,
+                eachRow.m_content
+            );
+            allEmails.push(eachEmail);
+        }
+
+        return allEmails;
+    }
 }

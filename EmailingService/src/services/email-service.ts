@@ -7,5 +7,5 @@ export default interface EmailService {
 
     retrieveAllEmails(): Promise<Email[]>;
 
-
+    retrieveAllEmailsOfSender(senderEmail: any): Promise<Email[]>;
 }

@@ -8,7 +8,7 @@ const emailDAO: EmailDAO = new EmailDAOImpl();
 
 
 // PASSED
-test('Test: DAO createMessage', async () => {
+test('Test: DAO createEmail', async () => {
     let sampleEmail: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
     sampleEmail = await emailDAO.createEmail(sampleEmail);
 
@@ -26,9 +26,25 @@ test('Test: DAO getAllEmails', async () => {
     sampleEmail2 = await emailDAO.createEmail(sampleEmail2);
     sampleEmail3 = await emailDAO.createEmail(sampleEmail3);
 
-    const allMessages: Email[] = await emailDAO.getAllEmails();
+    const allEmails: Email[] = await emailDAO.getAllEmails();
 
-    expect(allMessages.length).toBeGreaterThanOrEqual(3);
+    expect(allEmails.length).toBeGreaterThanOrEqual(3);
+});
+
+
+// PASSED
+test('Test: DAO getAllEmailsOfSender', async () => {
+    let sampleEmail1: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
+    let sampleEmail2: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
+    let sampleEmail3: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
+
+    sampleEmail1 = await emailDAO.createEmail(sampleEmail1);
+    sampleEmail2 = await emailDAO.createEmail(sampleEmail2);
+    sampleEmail3 = await emailDAO.createEmail(sampleEmail3);
+
+    const allEmails: Email[] = await emailDAO.getAllEmailsOfSender(sampleEmail1.senderEmail);
+
+    expect(allEmails.length).toBeGreaterThanOrEqual(3);
 });
 
 

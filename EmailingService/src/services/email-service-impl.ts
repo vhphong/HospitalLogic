@@ -16,4 +16,9 @@ export class EmailServiceImpl implements EmailService {
     retrieveAllEmails(): Promise<Email[]> {
         return this.emailDAO.getAllEmails();
     }
+
+
+    retrieveAllEmailsOfSender(senderEmail: any): Promise<Email[]> {
+        return this.emailDAO.getAllEmailsOfSender(senderEmail);
+    }
 }

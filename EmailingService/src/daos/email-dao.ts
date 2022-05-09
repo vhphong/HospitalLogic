@@ -10,4 +10,7 @@ export interface EmailDAO {
     // get all emails
     getAllEmails(): Promise<Email[]>;
 
+
+    // get all emails of a sender
+    getAllEmailsOfSender(senderEmail: string): Promise<Email[]>;
 }

@@ -45,6 +45,63 @@ app.post('/emails/create', async (req, res) => {
 });
 
 
+app.get('/emails', async (req, res) => {
+    if (req.query.senderemail) {
+        // if emails of sender were asked for
+        // GET /emails?senderemail=anyemail
+        try {
+            const senderEmailQuery = req.query.senderemail;
+            const allEmails: Email[] = await emailService.retrieveAllEmailsOfSender(senderEmailQuery);
+
+            res.status(200).send(allEmails);
+        } catch (error) {
+            if (error instanceof ResourceNotFoundException) {
+                res.status(400).send(error);
+            }
+        }
+    } else if (req.query.recipientemail) {
+        // if emails of recipient were asked for
+        // GET /emails?recipientemail=anyemail
+        try {
+            const recipientEmailQuery = req.query.recipientemail;
+            // const allEmails: Email[] = await emailService.retrieveAllEmailsOfRecipient(recipientEmailQuery);
+
+            // res.status(200).send(allEmails);
+        } catch (error) {
+            if (error instanceof ResourceNotFoundException) {
+                res.status(400).send(error);
+            }
+        }
+    } else if (req.query.senderemail && req.query.recipient) {
+        // if emails of sender and recipient were asked for
+        // GET /emails?senderemail=anyemail&recipientemail=anyemail
+        try {
+            const senderEmailQuery = req.query.senderemail;
+            const recipientEmailQuery = req.query.recipientemail;
+            // const allEmails: Email[] = await emailService.retrieveAllEmailsOfSenderRecipient(senderEmailQuery, recipientEmailQuery);
+
+            // res.status(200).send(allEmails);
+        } catch (error) {
+            if (error instanceof ResourceNotFoundException) {
+                res.status(400).send(error);
+            }
+        }
+    } else {
+        // if neither emails of sender nor recipient were asked for, then get all emails
+        // GET /emails
+        try {
+            const allEmails: Email[] = await emailService.retrieveAllEmails();
+    
+            res.status(200).send(allEmails);
+        } catch (error) {
+            if (error instanceof ResourceNotFoundException) {
+                res.status(400).send(error);
+            }
+        }
+    }
+});
+
+
 // get all emails
 app.get('/emails', async (req, res) => {
     try {
