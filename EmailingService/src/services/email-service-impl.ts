@@ -12,4 +12,8 @@ export class EmailServiceImpl implements EmailService {
         return this.emailDAO.createEmail(email);
     }
 
+
+    retrieveAllEmails(): Promise<Email[]> {
+        return this.emailDAO.getAllEmails();
+    }
 }

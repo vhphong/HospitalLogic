@@ -5,4 +5,7 @@ export default interface EmailService {
 
     composeEmail(email: Email): Promise<Email>;
 
+    retrieveAllEmails(): Promise<Email[]>;
+
+
 }

@@ -5,6 +5,7 @@ import { Email } from "./models/email";
 import EmailService from "./services/email-service";
 import { EmailServiceImpl } from "./services/email-service-impl";
 import { connection_pg } from "./connection-pg";
+import { ResourceNotFoundException } from "./exceptions/ResourceNotFoundException";
 
 
 const app = express();
@@ -40,6 +41,20 @@ app.post('/emails/create', async (req, res) => {
         }
     } catch (error) {
         res.status(400).send(error);
+    }
+});
+
+
+// get all emails
+app.get('/emails', async (req, res) => {
+    try {
+        const allEmails: Email[] = await emailService.retrieveAllEmails();
+
+        res.status(200).send(allEmails);
+    } catch (error) {
+        if (error instanceof ResourceNotFoundException) {
+            res.status(400).send(error);
+        }
     }
 });
 

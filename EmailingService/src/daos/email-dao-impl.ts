@@ -15,4 +15,24 @@ export class EmailDAOImpl implements EmailDAO {
         return email;
     }
 
+
+    async getAllEmails(): Promise<Email[]> {
+        const sqlStr: string = 'SELECT * FROM email ORDER BY email_id';
+        const result = await connection_pg.query(sqlStr);
+
+        const allEmails: Email[] = [];
+
+        for (let eachRow of result.rows) {
+            const eachEmail: Email = new Email(
+                eachRow.email_id,
+                eachRow.sender_email,
+                eachRow.recipient_email,
+                eachRow.email_subject,
+                eachRow.m_content
+            );
+            allEmails.push(eachEmail);
+        }
+
+        return allEmails;
+    }
 }
