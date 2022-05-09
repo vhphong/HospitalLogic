@@ -64,6 +64,22 @@ test('Test: DAO getAllEmailsOfRecipient', async () => {
 });
 
 
+// PASSED
+test('Test: DAO getAllEmailsOfSenderRecipient', async () => {
+    let sampleEmail1: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
+    let sampleEmail2: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
+    let sampleEmail3: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
+
+    sampleEmail1 = await emailDAO.createEmail(sampleEmail1);
+    sampleEmail2 = await emailDAO.createEmail(sampleEmail2);
+    sampleEmail3 = await emailDAO.createEmail(sampleEmail3);
+
+    const allEmails: Email[] = await emailDAO.getAllEmailsOfSenderRecipient(sampleEmail1.senderEmail, sampleEmail1.recipientEmail);
+
+    expect(allEmails.length).toBeGreaterThanOrEqual(3);
+});
+
+
 afterAll(async () => {
     connection_pg.end();
 });

@@ -78,9 +78,9 @@ app.get('/emails', async (req, res) => {
         try {
             const senderEmailQuery = req.query.senderemail;
             const recipientEmailQuery = req.query.recipientemail;
-            // const allEmails: Email[] = await emailService.retrieveAllEmailsOfSenderRecipient(senderEmailQuery, recipientEmailQuery);
+            const allEmails: Email[] = await emailService.retrieveAllEmailsOfSenderRecipient(senderEmailQuery, recipientEmailQuery);
 
-            // res.status(200).send(allEmails);
+            res.status(200).send(allEmails);
         } catch (error) {
             if (error instanceof ResourceNotFoundException) {
                 res.status(400).send(error);
