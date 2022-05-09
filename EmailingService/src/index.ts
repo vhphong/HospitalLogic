@@ -64,9 +64,9 @@ app.get('/emails', async (req, res) => {
         // GET /emails?recipientemail=anyemail
         try {
             const recipientEmailQuery = req.query.recipientemail;
-            // const allEmails: Email[] = await emailService.retrieveAllEmailsOfRecipient(recipientEmailQuery);
+            const allEmails: Email[] = await emailService.retrieveAllEmailsOfRecipient(recipientEmailQuery);
 
-            // res.status(200).send(allEmails);
+            res.status(200).send(allEmails);
         } catch (error) {
             if (error instanceof ResourceNotFoundException) {
                 res.status(400).send(error);
@@ -91,26 +91,12 @@ app.get('/emails', async (req, res) => {
         // GET /emails
         try {
             const allEmails: Email[] = await emailService.retrieveAllEmails();
-    
+
             res.status(200).send(allEmails);
         } catch (error) {
             if (error instanceof ResourceNotFoundException) {
                 res.status(400).send(error);
             }
-        }
-    }
-});
-
-
-// get all emails
-app.get('/emails', async (req, res) => {
-    try {
-        const allEmails: Email[] = await emailService.retrieveAllEmails();
-
-        res.status(200).send(allEmails);
-    } catch (error) {
-        if (error instanceof ResourceNotFoundException) {
-            res.status(400).send(error);
         }
     }
 });

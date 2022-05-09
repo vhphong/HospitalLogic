@@ -28,7 +28,7 @@ export class EmailDAOImpl implements EmailDAO {
                 eachRow.sender_email,
                 eachRow.recipient_email,
                 eachRow.email_subject,
-                eachRow.m_content
+                eachRow.email_content
             );
             allEmails.push(eachEmail);
         }
@@ -50,7 +50,29 @@ export class EmailDAOImpl implements EmailDAO {
                 eachRow.sender_email,
                 eachRow.recipient_email,
                 eachRow.email_subject,
-                eachRow.m_content
+                eachRow.email_content
+            );
+            allEmails.push(eachEmail);
+        }
+
+        return allEmails;
+    }
+
+
+    async getAllEmailsOfRecipient(recipientEmail: string): Promise<Email[]> {
+        const sqlStr: string = 'SELECT * FROM email WHERE recipient_email = $1 ORDER BY email_id';
+        const values = [recipientEmail];
+        const result = await connection_pg.query(sqlStr, values);
+
+        const allEmails: Email[] = [];
+
+        for (let eachRow of result.rows) {
+            const eachEmail: Email = new Email(
+                eachRow.email_id,
+                eachRow.sender_email,
+                eachRow.recipient_email,
+                eachRow.email_subject,
+                eachRow.email_content
             );
             allEmails.push(eachEmail);
         }
