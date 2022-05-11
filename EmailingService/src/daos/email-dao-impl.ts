@@ -1,7 +1,11 @@
 import { connection_pg } from "../connection-pg";
 import { Email } from "../models/email";
 import { EmailDAO } from "./email-dao";
+import sg from '@sendgrid/mail';
 
+require('dotenv').config({ path: 'app.env' });
+
+sg.setApiKey(process.env.SENDGRID_FULL_ACCESS_API_KEY);
 
 export class EmailDAOImpl implements EmailDAO {
 
@@ -13,6 +17,59 @@ export class EmailDAOImpl implements EmailDAO {
         email.emailID = result.rows[0].email_id;
 
         return email;
+    }
+
+
+    /**
+     * emailManifest {
+        to: recipientData,
+        from: senderData,
+        subject: subjectData,
+        text: textData,
+        html: `<h2>${textData}</h2>`,
+     * }
+     */
+    /**
+     *  {
+            "recipientEmail": "vh...@gmail.com",
+            "emailSubject": "greeting",
+            "content": "Hello vh..., sent by Sendgrid at 9:55 PM 05/10/2022"
+        }
+     */
+    async writeEmail(emailManifest: Email): Promise<Boolean> {
+        let retValue: Boolean;
+
+        const recipientData = emailManifest.recipientEmail;
+
+        const senderData = {
+            name: 'Phong Vo 02',                            // name of the sender
+            email: process.env.VERIFIED_SENDER_EMAIL        // sender email verified by Sendgrid.com
+        }
+
+        const subjectData = emailManifest.emailSubject;
+
+        const textData = emailManifest.content;
+
+        const message = {
+            to: recipientData,
+            from: senderData,
+            subject: subjectData,
+            text: textData,
+            html: `<h2>${textData}</h2>`
+        };
+
+        sg
+            .send(message)
+            .then((resp) => {
+                console.log(`Email sent successfully to ${message.to}! \n`, resp);
+                retValue = true;
+            })
+            .catch((error) => {
+                console.error('error: ' + error);
+                retValue = false;
+            });
+
+        return retValue;
     }
 
 

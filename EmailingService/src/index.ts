@@ -45,6 +45,24 @@ app.post('/emails/create', async (req, res) => {
 });
 
 
+// send a new email by using Sendgrid
+app.post('/sendemail', async (req, res) => {
+    try {
+        const emailManifest = req.body;
+
+        const sendEMailResult: Boolean = await emailService.sendEmailUsingSendgrid(emailManifest);
+
+        if (sendEMailResult == true) {
+            res.status(200).send(true);
+        } else {
+            res.status(400).send(false);
+        }
+    } catch (error) {
+        res.status(400).send(error);
+    }
+});
+
+
 app.get('/emails', async (req, res) => {
     if (req.query.senderemail) {
         // if emails of sender were asked for

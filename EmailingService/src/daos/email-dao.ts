@@ -7,6 +7,10 @@ export interface EmailDAO {
     createEmail(email: Email): Promise<Email>;
 
 
+    // create a new email by using SendGrid
+    writeEmail(emailManifest: Email): Promise<Boolean>;
+
+
     // get all emails
     getAllEmails(): Promise<Email[]>;
 

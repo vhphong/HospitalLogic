@@ -13,6 +13,11 @@ export class EmailServiceImpl implements EmailService {
     }
 
 
+    sendEmailUsingSendgrid(emailManifest: Email): Promise<Boolean> {
+        return this.emailDAO.writeEmail(emailManifest);
+    }
+
+
     retrieveAllEmails(): Promise<Email[]> {
         return this.emailDAO.getAllEmails();
     }
