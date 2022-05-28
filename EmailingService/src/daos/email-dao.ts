@@ -4,7 +4,7 @@ import { Email } from "../models/email";
 export interface EmailDAO {
 
     // create a new email
-    createEmail(email: Email): Promise<Email>;
+    insertEmailToSql(email: Email): Promise<Email>;
 
 
     // create a new email by using SendGrid

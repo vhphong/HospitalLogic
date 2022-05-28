@@ -9,8 +9,8 @@ const emailDAO: EmailDAO = new EmailDAOImpl();
 
 // PASSED
 test('Test: DAO createEmail', async () => {
-    let sampleEmail: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
-    sampleEmail = await emailDAO.createEmail(sampleEmail);
+    let sampleEmail: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!', new Date().toLocaleString('en-us'));
+    sampleEmail = await emailDAO.insertEmailToSql(sampleEmail);
 
     expect(sampleEmail.emailID).not.toBe(0);
 });
@@ -18,13 +18,13 @@ test('Test: DAO createEmail', async () => {
 
 // PASSED
 test('Test: DAO getAllEmails', async () => {
-    let sampleEmail1: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
-    let sampleEmail2: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
-    let sampleEmail3: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
+    let sampleEmail1: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!', new Date().toLocaleString('en-us'));
+    let sampleEmail2: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!', new Date().toLocaleString('en-us'));
+    let sampleEmail3: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!', new Date().toLocaleString('en-us'));
 
-    sampleEmail1 = await emailDAO.createEmail(sampleEmail1);
-    sampleEmail2 = await emailDAO.createEmail(sampleEmail2);
-    sampleEmail3 = await emailDAO.createEmail(sampleEmail3);
+    sampleEmail1 = await emailDAO.insertEmailToSql(sampleEmail1);
+    sampleEmail2 = await emailDAO.insertEmailToSql(sampleEmail2);
+    sampleEmail3 = await emailDAO.insertEmailToSql(sampleEmail3);
 
     const allEmails: Email[] = await emailDAO.getAllEmails();
 
@@ -34,13 +34,13 @@ test('Test: DAO getAllEmails', async () => {
 
 // PASSED
 test('Test: DAO getAllEmailsOfSender', async () => {
-    let sampleEmail1: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
-    let sampleEmail2: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
-    let sampleEmail3: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
+    let sampleEmail1: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!', new Date().toLocaleString('en-us'));
+    let sampleEmail2: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!', new Date().toLocaleString('en-us'));
+    let sampleEmail3: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!', new Date().toLocaleString('en-us'));
 
-    sampleEmail1 = await emailDAO.createEmail(sampleEmail1);
-    sampleEmail2 = await emailDAO.createEmail(sampleEmail2);
-    sampleEmail3 = await emailDAO.createEmail(sampleEmail3);
+    sampleEmail1 = await emailDAO.insertEmailToSql(sampleEmail1);
+    sampleEmail2 = await emailDAO.insertEmailToSql(sampleEmail2);
+    sampleEmail3 = await emailDAO.insertEmailToSql(sampleEmail3);
 
     const allEmails: Email[] = await emailDAO.getAllEmailsOfSender(sampleEmail1.senderEmail);
 
@@ -50,13 +50,13 @@ test('Test: DAO getAllEmailsOfSender', async () => {
 
 // PASSED
 test('Test: DAO getAllEmailsOfRecipient', async () => {
-    let sampleEmail1: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
-    let sampleEmail2: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
-    let sampleEmail3: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
+    let sampleEmail1: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!', new Date().toLocaleString('en-us'));
+    let sampleEmail2: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!', new Date().toLocaleString('en-us'));
+    let sampleEmail3: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!', new Date().toLocaleString('en-us'));
 
-    sampleEmail1 = await emailDAO.createEmail(sampleEmail1);
-    sampleEmail2 = await emailDAO.createEmail(sampleEmail2);
-    sampleEmail3 = await emailDAO.createEmail(sampleEmail3);
+    sampleEmail1 = await emailDAO.insertEmailToSql(sampleEmail1);
+    sampleEmail2 = await emailDAO.insertEmailToSql(sampleEmail2);
+    sampleEmail3 = await emailDAO.insertEmailToSql(sampleEmail3);
 
     const allEmails: Email[] = await emailDAO.getAllEmailsOfRecipient(sampleEmail1.recipientEmail);
 
@@ -66,13 +66,13 @@ test('Test: DAO getAllEmailsOfRecipient', async () => {
 
 // PASSED
 test('Test: DAO getAllEmailsOfSenderRecipient', async () => {
-    let sampleEmail1: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
-    let sampleEmail2: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
-    let sampleEmail3: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!');
+    let sampleEmail1: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!', new Date().toLocaleString('en-us'));
+    let sampleEmail2: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!', new Date().toLocaleString('en-us'));
+    let sampleEmail3: Email = new Email(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'subject 1', 'Hi!', new Date().toLocaleString('en-us'));
 
-    sampleEmail1 = await emailDAO.createEmail(sampleEmail1);
-    sampleEmail2 = await emailDAO.createEmail(sampleEmail2);
-    sampleEmail3 = await emailDAO.createEmail(sampleEmail3);
+    sampleEmail1 = await emailDAO.insertEmailToSql(sampleEmail1);
+    sampleEmail2 = await emailDAO.insertEmailToSql(sampleEmail2);
+    sampleEmail3 = await emailDAO.insertEmailToSql(sampleEmail3);
 
     const allEmails: Email[] = await emailDAO.getAllEmailsOfSenderRecipient(sampleEmail1.senderEmail, sampleEmail1.recipientEmail);
 

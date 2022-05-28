@@ -5,6 +5,7 @@ export class Email {
         public senderEmail: string,
         public recipientEmail: string,
         public emailSubject: string,
-        public content: string
+        public content: string,
+        public sendingDateTime: string
     ) { }
 };

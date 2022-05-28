@@ -8,8 +8,8 @@ export class EmailServiceImpl implements EmailService {
 
     emailDAO: EmailDAO = new EmailDAOImpl();
 
-    composeEmail(email: Email): Promise<Email> {
-        return this.emailDAO.createEmail(email);
+    createEmailToSql(email: Email): Promise<Email> {
+        return this.emailDAO.insertEmailToSql(email);
     }
 
 

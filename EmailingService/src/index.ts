@@ -16,8 +16,8 @@ app.use(cors());
 const emailService: EmailService = new EmailServiceImpl();
 
 
-// create a new email
-app.post('/emails/create', async (req, res) => {
+// save a copy of an email into the sql database
+app.post('/email/create', async (req, res) => {
     try {
         const emailBody = req.body;
 
@@ -33,11 +33,15 @@ app.post('/emails/create', async (req, res) => {
         let senderEmailVerification: Boolean = (result1.rowCount > 0) ? true : false;
         let recipientEmailVerification: Boolean = (result2.rowCount > 0) ? true : false;
 
-        if (!recipientEmailVerification) {
-            res.status(405).send('The recipient email does not exist.')
+        if (!senderEmailVerification && !recipientEmailVerification) {
+            res.status(404).send('Both sender and recipient emails do not exist.');
+        } else if (!recipientEmailVerification) {
+            res.status(404).send('The recipient email does not exist.');
+        } else if (!senderEmailVerification) {
+            res.status(404).send('The sender email does not exist.');
         } else {
-            let newEmail: Email = await emailService.composeEmail(emailBody);
-            res.status(200).send(newEmail);
+            let newEmail: Email = await emailService.createEmailToSql(emailBody);
+            res.status(201).send(newEmail);
         }
     } catch (error) {
         res.status(400).send(error);
@@ -46,11 +50,24 @@ app.post('/emails/create', async (req, res) => {
 
 
 // send a new email by using Sendgrid
-app.post('/sendemail', async (req, res) => {
+app.post('/email/send', async (req, res) => {
     try {
-        const emailManifest = req.body;
+        const emailBody = req.body;
 
-        const sendEMailResult: Boolean = await emailService.sendEmailUsingSendgrid(emailManifest);
+        // verify senderEmail and recipientEmail
+        const sqlStr1: string = 'SELECT * FROM employee WHERE u_email = $1';
+        const values1 = [emailBody.senderEmail];
+        const result1 = await connection_pg.query(sqlStr1, values1);
+
+        const sqlStr2: string = 'SELECT * FROM employee WHERE u_email = $1';
+        const values2 = [emailBody.recipientEmail];
+        const result2 = await connection_pg.query(sqlStr2, values2);
+
+        // verification of emails is optional if sending external email
+        let senderEmailVerification: Boolean = (result1.rowCount > 0) ? true : false;
+        let recipientEmailVerification: Boolean = (result2.rowCount > 0) ? true : false;
+
+        const sendEMailResult: Boolean = await emailService.sendEmailUsingSendgrid(emailBody);
 
         if (sendEMailResult == true) {
             res.status(200).send(true);
@@ -63,10 +80,10 @@ app.post('/sendemail', async (req, res) => {
 });
 
 
-app.get('/emails', async (req, res) => {
+app.get('/email', async (req, res) => {
     if (req.query.senderemail) {
-        // if emails of sender were asked for
-        // GET /emails?senderemail=anyemail
+        // if email of sender were asked for
+        // GET /email?senderemail=anyemail
         try {
             const senderEmailQuery = req.query.senderemail;
             const allEmails: Email[] = await emailService.retrieveAllEmailsOfSender(senderEmailQuery);
@@ -78,8 +95,8 @@ app.get('/emails', async (req, res) => {
             }
         }
     } else if (req.query.recipientemail) {
-        // if emails of recipient were asked for
-        // GET /emails?recipientemail=anyemail
+        // if email of recipient were asked for
+        // GET /email?recipientemail=anyemail
         try {
             const recipientEmailQuery = req.query.recipientemail;
             const allEmails: Email[] = await emailService.retrieveAllEmailsOfRecipient(recipientEmailQuery);
@@ -92,7 +109,7 @@ app.get('/emails', async (req, res) => {
         }
     } else if (req.query.senderemail && req.query.recipient) {
         // if emails of sender and recipient were asked for
-        // GET /emails?senderemail=anyemail&recipientemail=anyemail
+        // GET /email?senderemail=anyemail&recipientemail=anyemail
         try {
             const senderEmailQuery = req.query.senderemail;
             const recipientEmailQuery = req.query.recipientemail;
@@ -106,7 +123,7 @@ app.get('/emails', async (req, res) => {
         }
     } else {
         // if neither emails of sender nor recipient were asked for, then get all emails
-        // GET /emails
+        // GET /email
         try {
             const allEmails: Email[] = await emailService.retrieveAllEmails();
 

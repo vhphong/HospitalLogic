@@ -9,9 +9,11 @@ sg.setApiKey(process.env.SENDGRID_FULL_ACCESS_API_KEY);
 
 export class EmailDAOImpl implements EmailDAO {
 
-    async createEmail(email: Email): Promise<Email> {
-        const sqlStr: string = 'INSERT INTO email(sender_email, recipient_email, email_subject, email_content) VALUES ($1, $2, $3, $4) RETURNING email_id';
-        const values = [email.senderEmail, email.recipientEmail, email.emailSubject, email.content];
+    // save a copy of an email into the sql database
+    async insertEmailToSql(email: Email): Promise<Email> {
+        let dateTimeNowStr = new Date().toLocaleString('en-us');     // 2022-05-28 11:56:02
+        const sqlStr: string = 'INSERT INTO email(sender_email, recipient_email, email_subject, email_content, sending_timestamp) VALUES ($1, $2, $3, $4, $5) RETURNING email_id';
+        const values = [email.senderEmail, email.recipientEmail, email.emailSubject, email.content, dateTimeNowStr];
         const result = await connection_pg.query(sqlStr, values);
 
         email.emailID = result.rows[0].email_id;
@@ -37,13 +39,12 @@ export class EmailDAOImpl implements EmailDAO {
         }
      */
     async writeEmail(emailManifest: Email): Promise<Boolean> {
-        let retValue: Boolean;
 
         const recipientData = emailManifest.recipientEmail;
 
         const senderData = {
             name: 'Phong Vo 02',                            // name of the sender
-            email: process.env.VERIFIED_SENDER_EMAIL        // sender email verified by Sendgrid.com
+            email: process.env.VERIFIED_SENDER_EMAIL        // sender email, verified by Sendgrid.com
         }
 
         const subjectData = emailManifest.emailSubject;
@@ -57,6 +58,8 @@ export class EmailDAOImpl implements EmailDAO {
             text: textData,
             html: `<h2>${textData}</h2>`
         };
+
+        let retValue: Boolean = true;
 
         sg
             .send(message)
@@ -85,7 +88,8 @@ export class EmailDAOImpl implements EmailDAO {
                 eachRow.sender_email,
                 eachRow.recipient_email,
                 eachRow.email_subject,
-                eachRow.email_content
+                eachRow.email_content,
+                eachRow.sending_timestamp
             );
             allEmails.push(eachEmail);
         }
@@ -107,7 +111,8 @@ export class EmailDAOImpl implements EmailDAO {
                 eachRow.sender_email,
                 eachRow.recipient_email,
                 eachRow.email_subject,
-                eachRow.email_content
+                eachRow.email_content,
+                eachRow.sending_timestamp
             );
             allEmails.push(eachEmail);
         }
@@ -129,7 +134,8 @@ export class EmailDAOImpl implements EmailDAO {
                 eachRow.sender_email,
                 eachRow.recipient_email,
                 eachRow.email_subject,
-                eachRow.email_content
+                eachRow.email_content,
+                eachRow.sending_timestamp
             );
             allEmails.push(eachEmail);
         }
@@ -151,7 +157,8 @@ export class EmailDAOImpl implements EmailDAO {
                 eachRow.sender_email,
                 eachRow.recipient_email,
                 eachRow.email_subject,
-                eachRow.email_content
+                eachRow.email_content,
+                eachRow.sending_timestamp
             );
             allEmails.push(eachEmail);
         }

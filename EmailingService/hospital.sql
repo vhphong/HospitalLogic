@@ -29,6 +29,7 @@ SELECT * FROM patient WHERE patient_name = 'Alex';
 DELETE * FROM patient WHERE patient_name = samplePatient1;
 
 
+
 -- PostgreSQL -------------------------------------------------
 
 DROP TABLE patient;
@@ -38,9 +39,11 @@ CREATE TABLE IF NOT EXISTS patient (
     patient_name VARCHAR(200) NOT NULL DEFAULT 'TBD',
     is_inpatient BOOLEAN NOT NULL DEFAULT TRUE,
     patient_status VARCHAR(300),
-    date_of_visit DATE NOT NULL
+    date_of_visit TIMESTAMP NOT NULL
 );
 
+
+ALTER TABLE patient ALTER COLUMN date_of_visit TYPE TIMESTAMP;
 SELECT * FROM patient;
 SELECT * FROM patient WHERE patient_id = 1;
 SELECT * FROM patient WHERE patient_name = 'Alex';
@@ -58,11 +61,12 @@ CREATE TABLE IF NOT EXISTS expense (
     expense_id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     reason VARCHAR(300) NOT NULL,
     amount MONEY NOT NULL,
-    billing_date DATE NOT NULL,
+    billing_date TIMESTAMP NOT NULL,
     p_id INT NOT NULL,
     CONSTRAINT fk_expense_patient FOREIGN KEY (p_id) REFERENCES patient(patient_id)
 );
 
+ALTER TABLE expense ALTER COLUMN billing_date TYPE TIMESTAMP;
 SELECT * FROM expense ORDER BY p_id;
 SELECT * FROM expense WHERE p_id = 1;
 SELECT * FROM expense WHERE patient_name = 'Alex';
@@ -90,6 +94,7 @@ SELECT * FROM employee ORDER BY u_id;
 
 
 
+
 -----------------------------------------------
 DROP TABLE messages;
 
@@ -97,10 +102,14 @@ CREATE TABLE IF NOT EXISTS messages (
     m_id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     sender_email VARCHAR(200) NOT NULL,
     recipient_email VARCHAR(200) NOT NULL,
-    m_content TEXT NOT NULL
+    m_content TEXT NOT NULL,
+    sending_timestamp TIMESTAMP NOT NULL
 );
 
+ALTER TABLE messages ADD COLUMN sending_timestamp TIMESTAMP;
 SELECT * FROM messages ORDER BY m_id;
+
+
 
 
 -----------------------------------------------
@@ -111,7 +120,9 @@ CREATE TABLE IF NOT EXISTS email (
     sender_email VARCHAR(200) NOT NULL,
     recipient_email VARCHAR(200) NOT NULL,
     email_subject TEXT NOT NULL,
-    email_content TEXT NOT NULL
+    email_content TEXT NOT NULL,
+    sending_timestamp TIMESTAMP NOT NULL
 );
 
+ALTER TABLE email ADD COLUMN sending_timestamp TIMESTAMP;
 SELECT * FROM email ORDER BY email_id;

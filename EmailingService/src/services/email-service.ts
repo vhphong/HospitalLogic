@@ -3,7 +3,7 @@ import { Email } from "../models/email";
 
 export default interface EmailService {
 
-    composeEmail(email: Email): Promise<Email>;
+    createEmailToSql(email: Email): Promise<Email>;
 
     sendEmailUsingSendgrid(emailManifest: Email): Promise<Boolean>;
 
