@@ -4,6 +4,7 @@ export class Message {
         public messageID: number,
         public senderEmail: string,
         public recipientEmail: string,
-        public content: string
+        public content: string,
+        public sendingDateTime: string
     ) { }
 };

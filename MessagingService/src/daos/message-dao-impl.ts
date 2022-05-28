@@ -6,8 +6,9 @@ import { MessageDAO } from "./message-dao";
 export class MessageDAOImpl implements MessageDAO {
 
     async createMessage(message: Message): Promise<Message> {
-        const sqlStr: string = 'INSERT INTO messages(sender_email, recipient_email, m_content) VALUES ($1, $2, $3) RETURNING m_id';
-        const values = [message.senderEmail, message.recipientEmail, message.content];
+        let dateTimeNowStr = new Date().toLocaleString('en-us');     // 2022-05-28 11:56:02
+        const sqlStr: string = 'INSERT INTO messages(sender_email, recipient_email, m_content, sending_timestamp) VALUES ($1, $2, $3, $4) RETURNING m_id';
+        const values = [message.senderEmail, message.recipientEmail, message.content, dateTimeNowStr];
         const result = await connection_pg.query(sqlStr, values);
 
         message.messageID = result.rows[0].m_id;
@@ -27,7 +28,8 @@ export class MessageDAOImpl implements MessageDAO {
                 eachRow.m_id,
                 eachRow.sender_email,
                 eachRow.recipient_email,
-                eachRow.m_content
+                eachRow.m_content,
+                eachRow.sending_timestamp
             );
             allMessages.push(eachMessage);
         }
@@ -48,7 +50,8 @@ export class MessageDAOImpl implements MessageDAO {
                 eachRow.m_id,
                 eachRow.sender_email,
                 eachRow.recipient_email,
-                eachRow.m_content
+                eachRow.m_content,
+                eachRow.sending_timestamp
             );
             allMessages.push(eachMessage);
         }
@@ -69,7 +72,8 @@ export class MessageDAOImpl implements MessageDAO {
                 eachRow.m_id,
                 eachRow.sender_email,
                 eachRow.recipient_email,
-                eachRow.m_content
+                eachRow.m_content,
+                eachRow.sending_timestamp
             );
             allMessages.push(eachMessage);
         }
@@ -90,7 +94,8 @@ export class MessageDAOImpl implements MessageDAO {
                 eachRow.m_id,
                 eachRow.sender_email,
                 eachRow.recipient_email,
-                eachRow.m_content
+                eachRow.m_content,
+                eachRow.sending_timestamp
             );
             allMessages.push(eachMessage);
         }

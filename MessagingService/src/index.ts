@@ -29,22 +29,18 @@ app.post('/messages/create', async (req, res) => {
         const values2 = [messageBody.recipientEmail];
         const result2 = await connection_pg.query(sqlStr2, values2);
 
-        let senderEmailVerification: Boolean = false;
-        let recipientEmailVerification: Boolean = false;
+        let senderEmailVerification: Boolean = (result1.rowCount > 0) ? true : false;
+        let recipientEmailVerification: Boolean = (result2.rowCount > 0) ? true : false;
 
-        if (result1.rowCount > 0) {
-            senderEmailVerification = true;
-        }
-
-        if (result2.rowCount > 0) {
-            recipientEmailVerification = true;
-        }
-
-        if (!recipientEmailVerification) {
-            res.status(405).send('The recipient email does not exist.')
+        if (!recipientEmailVerification && !senderEmailVerification) {
+            res.status(404).send('Both sender and recipient emails does not exist.')
+        } else if (!recipientEmailVerification) {
+            res.status(404).send('The recipient email does not exist.')
+        } else if (!senderEmailVerification) {
+            res.status(404).send('The sender email does not exist.')
         } else {
             let newMessage: Message = await messageService.composeMessage(messageBody);
-            res.status(200).send(newMessage);
+            res.status(201).send(newMessage);
         }
     } catch (error) {
         res.status(400).send(error);
@@ -63,7 +59,7 @@ app.get('/messages', async (req, res) => {
             res.status(200).send(allMessages);
         } catch (error) {
             if (error instanceof ResourceNotFoundException) {
-                res.status(400).send(error);
+                res.status(404).send(error);
             }
         }
     } else if (req.query.recipientemail) {
@@ -76,7 +72,7 @@ app.get('/messages', async (req, res) => {
             res.status(200).send(allMessages);
         } catch (error) {
             if (error instanceof ResourceNotFoundException) {
-                res.status(400).send(error);
+                res.status(404).send(error);
             }
         }
     } else if (req.query.senderemail && req.query.recipient) {
@@ -90,7 +86,7 @@ app.get('/messages', async (req, res) => {
             res.status(200).send(allMessages);
         } catch (error) {
             if (error instanceof ResourceNotFoundException) {
-                res.status(400).send(error);
+                res.status(404).send(error);
             }
         }
     } else {
@@ -102,7 +98,7 @@ app.get('/messages', async (req, res) => {
             res.status(200).send(allMessages);
         } catch (error) {
             if (error instanceof ResourceNotFoundException) {
-                res.status(400).send(error);
+                res.status(404).send(error);
             }
         }
     }

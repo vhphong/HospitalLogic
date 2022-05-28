@@ -9,7 +9,7 @@ const messageDAO: MessageDAO = new MessageDAOImpl();
 
 // PASSED
 test('Test: DAO createMessage', async () => {
-    let sampleMessage: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
+    let sampleMessage: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!', new Date().toLocaleString('en-us'));
     sampleMessage = await messageDAO.createMessage(sampleMessage);
 
     console.log(sampleMessage);
@@ -20,9 +20,9 @@ test('Test: DAO createMessage', async () => {
 
 // PASSED
 test('Test: DAO getAllMessages', async () => {
-    let sampleMessage1: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
-    let sampleMessage2: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
-    let sampleMessage3: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
+    let sampleMessage1: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!', new Date().toLocaleString('en-us'));
+    let sampleMessage2: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!', new Date().toLocaleString('en-us'));
+    let sampleMessage3: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!', new Date().toLocaleString('en-us'));
 
     sampleMessage1 = await messageDAO.createMessage(sampleMessage1);
     sampleMessage2 = await messageDAO.createMessage(sampleMessage2);
@@ -36,9 +36,9 @@ test('Test: DAO getAllMessages', async () => {
 
 // PASSED
 test('Test: DAO getAllMessagesOfSender', async () => {
-    let sampleMessage1: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
-    let sampleMessage2: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
-    let sampleMessage3: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
+    let sampleMessage1: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!', new Date().toLocaleString('en-us'));
+    let sampleMessage2: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!', new Date().toLocaleString('en-us'));
+    let sampleMessage3: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!', new Date().toLocaleString('en-us'));
 
     sampleMessage1 = await messageDAO.createMessage(sampleMessage1);
     sampleMessage2 = await messageDAO.createMessage(sampleMessage2);
@@ -52,9 +52,9 @@ test('Test: DAO getAllMessagesOfSender', async () => {
 
 // PASSED
 test('Test: DAO getAllMessagesOfRecipient', async () => {
-    let sampleMessage1: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
-    let sampleMessage2: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
-    let sampleMessage3: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
+    let sampleMessage1: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!', new Date().toLocaleString('en-us'));
+    let sampleMessage2: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!', new Date().toLocaleString('en-us'));
+    let sampleMessage3: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!', new Date().toLocaleString('en-us'));
 
     sampleMessage1 = await messageDAO.createMessage(sampleMessage1);
     sampleMessage2 = await messageDAO.createMessage(sampleMessage2);
@@ -68,9 +68,9 @@ test('Test: DAO getAllMessagesOfRecipient', async () => {
 
 // PASSED
 test('Test: getAllMessagesOfSenderRecipient', async () => {
-    let sampleMessage1: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
-    let sampleMessage2: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
-    let sampleMessage3: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!');
+    let sampleMessage1: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!', new Date().toLocaleString('en-us'));
+    let sampleMessage2: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!', new Date().toLocaleString('en-us'));
+    let sampleMessage3: Message = new Message(0, 'sampleAccount1@email.com', 'sampleAccount2@email.com', 'Hi!', new Date().toLocaleString('en-us'));
 
     sampleMessage1 = await messageDAO.createMessage(sampleMessage1);
     sampleMessage2 = await messageDAO.createMessage(sampleMessage2);
