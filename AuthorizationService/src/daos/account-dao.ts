@@ -19,16 +19,16 @@ export interface AccountDAO {
     isAccountExisted(account: Account): Promise<Boolean>;
 
 
-    // update account
-    checkIfEmailAvailable(Account: string): Promise<Boolean>;
+    // check for account's availibility
+    checkIfEmailAvailable(email: string): Promise<Boolean>;
 
 
-    // activate account
-    enableAccount(account: Account): Promise<Boolean>;
+    // activate account by email
+    enableAccount(email: string): Promise<Boolean>;
 
 
     // deactivate account
-    disableAccount(account: Account): Promise<Boolean>;
+    disableAccount(email: string): Promise<Boolean>;
 
 
     // change password

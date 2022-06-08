@@ -80,53 +80,41 @@ export class AccountDAOImpl implements AccountDAO {
     }
 
 
-    async enableAccount(account: Account): Promise<Boolean> {
-        const sqlStr1: string = 'UPDATE employee SET is_active = $1 WHERE u_email = $2';
-        const values1 = [true, account.email];
-        await connection_pg.query(sqlStr1, values1);
+    async enableAccount(email: string): Promise<Boolean> {
+        // check for the resource's existence
+        const sqlExistence: string = 'SELECT * FROM employee WHERE u_email = $1';
+        const values1 = [email];
+        const result2 = await connection_pg.query(sqlExistence, values1);
 
-        const sqlStr2: string = 'SELECT * FROM employee WHERE u_email = $1';
-        const values2 = [account.email];
-        const result2 = await connection_pg.query(sqlStr2, values2);
+        if (result2.rowCount == 0) {    // if resource DNE
+            throw new ResourceNotFoundException(`The account with email ${email} does not exist.`);
+        } else {
+            // if resource exists
+            const sqlUpdate: string = 'UPDATE employee SET is_active = $1 WHERE u_email = $2';
+            const values2 = [true, email];
+            await connection_pg.query(sqlUpdate, values2);
 
-        if (result2.rowCount == 0) {
-            throw new ResourceNotFoundException(`The account with email ${account.email} does not exist.`);
+            return true;
         }
-
-        const row = result2.rows[0];
-        const retrievedAccount: Account = new Account(
-            row.u_id,
-            row.u_email,
-            row.u_pw,
-            row.is_active
-        );
-
-        return (retrievedAccount.isActive == true) ? true : false;
     }
 
 
-    async disableAccount(account: Account): Promise<Boolean> {
-        const sqlStr1: string = 'UPDATE employee SET is_active = $1 WHERE u_email = $2';
-        const values1 = [false, account.email];
-        await connection_pg.query(sqlStr1, values1);
+    async disableAccount(email: string): Promise<Boolean> {
+        // check for the resource's existence
+        const sqlExistence: string = 'SELECT * FROM employee WHERE u_email = $1';
+        const values1 = [email];
+        const result2 = await connection_pg.query(sqlExistence, values1);
 
-        const sqlStr2: string = 'SELECT * FROM employee WHERE u_email = $1';
-        const values2 = [account.email];
-        const result2 = await connection_pg.query(sqlStr2, values2);
+        if (result2.rowCount == 0) {    // if resource DNE
+            throw new ResourceNotFoundException(`The account with email ${email} does not exist.`);
+        } else {
+            // if resource exists
+            const sqlUpdate: string = 'UPDATE employee SET is_active = $1 WHERE u_email = $2';
+            const values2 = [false, email];
+            await connection_pg.query(sqlUpdate, values2);
 
-        if (result2.rowCount == 0) {
-            throw new ResourceNotFoundException(`The account with email ${account.email} does not exist.`);
+            return true;
         }
-
-        const row = result2.rows[0];
-        const retrievedAccount: Account = new Account(
-            row.u_id,
-            row.u_email,
-            row.u_pw,
-            row.is_active
-        );
-
-        return (retrievedAccount.isActive == false) ? true : false;
     }
 
 

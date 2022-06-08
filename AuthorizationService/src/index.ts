@@ -17,7 +17,6 @@ const accountService: AccountService = new AccountServiceImpl();
 // register a new account, using hashing password
 app.post('/accounts/register', async (req, res) => {
     try {
-
         // read in email and password
         const bodyEmail = req.body.email;
         const bodyPassword = encrypt(req.body.password);
@@ -120,10 +119,10 @@ app.patch('/accounts/login', async (req, res) => {
 
 
 // activate an account
-app.put('/accounts/activate', async (req, res) => {
+app.patch('/accounts/activate', async (req, res) => {
     try {
-        const reqBody = req.body;
-        const accountActivationResult: Boolean = await accountService.activateAccount(reqBody);
+        const reqBodyEmail = req.body.email;
+        const accountActivationResult: Boolean = await accountService.activateAccount(reqBodyEmail);
 
         res.status(200).send(accountActivationResult);
     } catch (error) {
@@ -135,10 +134,10 @@ app.put('/accounts/activate', async (req, res) => {
 
 
 // deactivate an account
-app.put('/accounts/deactivate', async (req, res) => {
+app.patch('/accounts/deactivate', async (req, res) => {
     try {
-        const reqBody = req.body;
-        const accountDeactivationResult: Boolean = await accountService.deactivateAccount(reqBody);
+        const reqBodyEmail = req.body.email;
+        const accountDeactivationResult: Boolean = await accountService.deactivateAccount(reqBodyEmail);
 
         res.status(200).send(accountDeactivationResult);
     } catch (error) {
@@ -192,4 +191,4 @@ const PORT = process.env.PORT_auth || 3001;
 app.listen(
     PORT,
     () => console.log('Authorization Service server started on PORT ' + PORT)
-); 
+);

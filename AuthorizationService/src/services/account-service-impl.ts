@@ -1,8 +1,9 @@
 import { Account } from "../models/employee";
+
+import { AccountDAO } from "../daos/account-dao";
 import { AccountDAOImpl } from "../daos/account-dao-impl";
 
 import AccountService from "./account-service";
-import { AccountDAO } from "../daos/account-dao";
 
 
 export class AccountServiceImpl implements AccountService {
@@ -35,13 +36,13 @@ export class AccountServiceImpl implements AccountService {
     }
 
 
-    activateAccount(account: Account): Promise<Boolean> {
-        return this.accountDAO.enableAccount(account);
+    activateAccount(email: string): Promise<Boolean> {
+        return this.accountDAO.enableAccount(email);
     }
 
 
-    deactivateAccount(account: Account): Promise<Boolean> {
-        return this.accountDAO.disableAccount(account);
+    deactivateAccount(email: string): Promise<Boolean> {
+        return this.accountDAO.disableAccount(email);
     }
 
 

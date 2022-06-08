@@ -76,7 +76,7 @@ test('Test: activateAccount', async () => {
 
     sampleAccount1 = await accountDAO.createAccount(sampleAccount1);
 
-    const accountActiveStatus: Boolean = await accountDAO.enableAccount(sampleAccount1);
+    const accountActiveStatus: Boolean = await accountDAO.enableAccount(sampleAccount1.email);
 
     expect(accountActiveStatus).toBeTruthy;
 });
@@ -88,7 +88,7 @@ test('Test: deactivateAccount', async () => {
 
     sampleAccount1 = await accountDAO.createAccount(sampleAccount1);
 
-    const accountActiveStatus: Boolean = await accountDAO.disableAccount(sampleAccount1);
+    const accountActiveStatus: Boolean = await accountDAO.disableAccount(sampleAccount1.email);
 
     expect(accountActiveStatus).not.toBeTruthy;
 });
