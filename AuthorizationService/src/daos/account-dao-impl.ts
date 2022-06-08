@@ -84,9 +84,9 @@ export class AccountDAOImpl implements AccountDAO {
         // check for the resource's existence
         const sqlExistence: string = 'SELECT * FROM employee WHERE u_email = $1';
         const values1 = [email];
-        const result2 = await connection_pg.query(sqlExistence, values1);
+        const result1 = await connection_pg.query(sqlExistence, values1);
 
-        if (result2.rowCount == 0) {    // if resource DNE
+        if (result1.rowCount == 0) {    // if resource DNE
             throw new ResourceNotFoundException(`The account with email ${email} does not exist.`);
         } else {
             // if resource exists
@@ -103,9 +103,9 @@ export class AccountDAOImpl implements AccountDAO {
         // check for the resource's existence
         const sqlExistence: string = 'SELECT * FROM employee WHERE u_email = $1';
         const values1 = [email];
-        const result2 = await connection_pg.query(sqlExistence, values1);
+        const result1 = await connection_pg.query(sqlExistence, values1);
 
-        if (result2.rowCount == 0) {    // if resource DNE
+        if (result1.rowCount == 0) {    // if resource DNE
             throw new ResourceNotFoundException(`The account with email ${email} does not exist.`);
         } else {
             // if resource exists
@@ -118,31 +118,21 @@ export class AccountDAOImpl implements AccountDAO {
     }
 
 
-    async alterPassword(account: Account, newPassword: string): Promise<Boolean> {
-        const sqlStr: string = 'UPDATE employee SET u_pw = $1 WHERE u_email = $2';
-        const values = [newPassword, account.email];
-        await connection_pg.query(sqlStr, values);
+    async alterPassword(email: string, newPassword: string): Promise<Boolean> {
+        // check for the resource's existence
+        const sqlExistence: string = 'SELECT * FROM employee WHERE u_email = $1';
+        const values1 = [email];
+        const result1 = await connection_pg.query(sqlExistence, values1);
 
-        const sqlStr2: string = 'SELECT * FROM employee WHERE u_email = $1';
-        const values2 = [account.email];
-        const result2 = await connection_pg.query(sqlStr2, values2);
-
-        if (result2.rowCount == 0) {
-            return false;
-        }
-
-        const row = result2.rows[0];
-        const retrievedAccount: Account = new Account(
-            row.u_id,
-            row.u_email,
-            row.u_pw,
-            row.is_active
-        );
-
-        if (retrievedAccount.password === newPassword) {
-            return true;
+        if (result1.rowCount == 0) {    // if resource DNE
+            throw new ResourceNotFoundException(`The account with email ${email} does not exist.`);
         } else {
-            return false;
+            // if resource exists
+            const sqlUpdate: string = 'UPDATE employee SET u_pw = $1 WHERE u_email = $2';
+            const values2 = [newPassword, email];
+            await connection_pg.query(sqlUpdate, values2);
+
+            return true;
         }
     }
 

@@ -100,7 +100,7 @@ test('Test: changePassword', async () => {
 
     sampleAccount1 = await accountDAO.createAccount(sampleAccount1);
 
-    await accountDAO.alterPassword(sampleAccount1, 'newpw');
+    await accountDAO.alterPassword(sampleAccount1.email, 'newpw');
 
     const retrievedAccount: Account = await accountDAO.getAccountByEmail(sampleAccount1.email);
 

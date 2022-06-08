@@ -46,8 +46,8 @@ export class AccountServiceImpl implements AccountService {
     }
 
 
-    changePassword(account: Account, newPassword: string): Promise<Boolean> {
-        return this.accountDAO.alterPassword(account, newPassword);
+    changePassword(email: string, newPassword: string): Promise<Boolean> {
+        return this.accountDAO.alterPassword(email, newPassword);
     }
 
 

@@ -149,14 +149,14 @@ app.patch('/accounts/deactivate', async (req, res) => {
 
 
 // change account's password
-app.put('/accounts/changepassword/:email', async (req, res) => {
+app.patch('/accounts/changepassword/:email', async (req, res) => {
     try {
         // retrieve the account by email
         const emailParam = req.params.email;
         const newPassword = req.body.newPassword;
         const retrievedAccount: Account = await accountService.retrieveAccountByEmail(emailParam);
 
-        const changePasswordResult: Boolean = await accountService.changePassword(retrievedAccount, newPassword)
+        const changePasswordResult: Boolean = await accountService.changePassword(retrievedAccount.email, newPassword)
 
         res.status(200).send(changePasswordResult);
     } catch (error) {

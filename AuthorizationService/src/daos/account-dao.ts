@@ -32,7 +32,7 @@ export interface AccountDAO {
 
 
     // change password
-    alterPassword(account: Account, newPw: string): Promise<Boolean>;
+    alterPassword(email: string, newPw: string): Promise<Boolean>;
 
 
     // remove account
